@@ -1,21 +1,17 @@
 'use strict'
 
-const MYSQL_CONNECTION = require('../database.js');
+const mysql_connection = require('../database.js');
 let { responseJson } = require('./responseJson.js');
 
-let saveOrEdit = (validate, procedure, data, res) => {
-
-  if(validate) {
-  	
-		let query = `CALL ${procedure}`;
-	
-		MYSQL_CONNECTION.query(query, [data], (err, rows, field) => {
-				if (!err) { responseJson(res, 200, '', rows); } 
-				else { responseJson(res, 404, err); }
+let saveOrEdit = (procedure, data) => {
+	return new Promise( (resolve, reject) => {
+			let query = `CALL ${procedure}`;
+			mysql_connection.query(query, [data], (err, rows, field) => {
+				if (err || rows.length === 0) { return reject(err) }
+				resolve(rows[0][0]); 
 			});
-  } else{
-		return  responseJson(res, 404, 'It has not been validated');
- 	}
+	});
 };
+
 
 module.exports = { saveOrEdit };

@@ -1,42 +1,58 @@
 'use strict'
 
-const MYSQL_CONNECTION = require('../database.js');
-const VALIDATIONS = require('../validations/ListValidations.js');
+const listModel = require('../models/list.js');
 var { responseJson } = require('../lib/responseJson.js');
 let { saveOrEdit } = require('../lib/saveOrEdit.js');
 
 var controller = {
-	saveOrEdit: (req, res) => {
-		let id = 0;
-		if( req.params.id ){ id = req.params.id; }
-		
-		let valid = VALIDATIONS.listValidate(req.body, id);
-		let { name, id_user } = req.body;
-		let data = [ id, name, id_user];
+	save: async (req, res) => {
+		let data = await dataStructure(0, req.body, req.userId);
+		saveOrUpdate(data, res);
+	},
+	update: async (req, res) => {
+		if(!req.params.id) {
+			return responseJson(res, 404, 'No list selected');
+		}
+		let data = await dataStructure(req.params.id, req.body, req.userId);	
+		saveOrUpdate(data,res);
 
-		saveOrEdit(validate, 'listAddOrEdit(?)', data, res);
-	
-	},// ******** end save ********
+	},
 	getByUserId: (req, res) => {
-		let { id } = req.params;
-		id = parseInt(id,10);
-
-		let query = 'SELECT * FROM lists where id_user = ?';
-
-		MYSQL_CONNECTION.query(query, [id], (err, rows, field) => {
-			if (!err && rows.length != 0) { responseJson(res, 200,'', rows); } 
-			else { responseJson(res, 404, err); }
-		})
+		if(!req.userId) {
+			return responseJson(res, 404, 'No token provider');
+		}
+		listModel.getUser(req.userId)
+		.then( response => responseJson(res, 200, '', response))
+		.catch( err => responseJson(res, 404, `Error: ${err}`));
 	},// ******** end geByUserId ********
 	delete: (req, res) => {
-		let { id } = req.params;
-		let query = 'DELETE FROM lists WHERE lists.id_list = ?';
-
-		MYSQL_CONNECTION.query(query, [id], (err,rows, field) => {
-			if (!err) { responseJson(res, 200,'', rows); } 
-			else { responseJson(res, 404, err); }
-		});
+		if(!req.params.id) {
+			return responseJson(res, 404, 'List id missing')
+		}
+		listModel.deleteList(req.params.id)
+		.then(response => responseJson(res, 200, '', response))
+		.catch( err => responseJson(res, 404, `Error: ${err}`));
 	}// ******** end delete ********
 }
 
+const saveOrUpdate = (data, res) => {
+	saveOrEdit('listAddOrEdit(?)', data)
+	.then(response => {
+		responseJson(res, 200, '', response);
+	})
+	.catch( err => responseJson(res, 404, `Error: ${err}`));
+}
+
+const dataStructure = (idList, dataReceived, userId) => {
+	return new Promise( resolve => {
+		let fullData = Object.values(dataReceived);
+		fullData.unshift(idList);
+		fullData.push(userId) 
+
+		resolve(fullData);
+	});
+} 
+
 module.exports = controller;	
+
+//end ListController

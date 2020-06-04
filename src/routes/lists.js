@@ -1,15 +1,17 @@
 'use strict'
 
-const EXPRESS = require('express');
-const ROUTER = EXPRESS.Router();
-const LIST_CONTROLLER = require('../controllers/ListController.js');
+const express = require('express');
+const router = express.Router();
+const verifyToken = require('../lib/verifyToken.js');
+const listController = require('../controllers/ListController.js');
+const listValidation = require('../validations/ListValidations.js');
 
-ROUTER.get('/lists/:id', LIST_CONTROLLER.getByUserId);
+router.get('/lists/', verifyToken, listController.getByUserId);
 
-ROUTER.post('/list', LIST_CONTROLLER.saveOrEdit);
+router.post('/list', verifyToken, listValidation, listController.save);
 
-ROUTER.put('/list/:id', LIST_CONTROLLER.saveOrEdit);
+router.put('/list/:id', listValidation, listController.update);
 
-ROUTER.delete('/list/:id', LIST_CONTROLLER.delete);
+router.delete('/list/:id', listController.delete);
 
-module.exports = ROUTER;
+module.exports = router;

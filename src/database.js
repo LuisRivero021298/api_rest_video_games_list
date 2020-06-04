@@ -1,13 +1,13 @@
-const MYSQL = require('mysql');
+const mysql = require('mysql');
 
-const MYSQL_CONNECTION = MYSQL.createConnection({
+const mysql_connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
 	password: '021298ld',
 	database: 'gameLists'
 });
 
-MYSQL_CONNECTION.connect((err)=>{
+mysql_connection.connect((err)=>{
 	if (err){
 		console.log(err);
 		return;
@@ -16,7 +16,7 @@ MYSQL_CONNECTION.connect((err)=>{
 	}
 });
 
-module.exports = MYSQL_CONNECTION;
+module.exports = mysql_connection;
 
 
 /*
