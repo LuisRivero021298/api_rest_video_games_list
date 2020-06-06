@@ -1,42 +1,27 @@
 'use strict'
 
-const VALID = require('validator');
-var { responseJson } = require('../lib/responseJson.js');
+const valid = require('validator');
+let { noEmpty } = require('../lib/global.js')
+let { responseJson } = require('../lib/global.js');
 
-const VALIDATE = {
-	ratingValidate: (data, id) => {
-		if (id === 0) {
-			try {
-				var validateAll = {
-					validateIdList: !VALID.isEmpty(data.id_list),
-					validateIdGame: !VALID.isEmpty(data.id_game),
-					validateIdConsole: !VALID.isEmpty(data.id_console),
-					validateRate: !VALID.isEmpty(data.rate)
-				}
+function validateRating (req, res, next) {
+	let data = numToString(req.body);
+	let noEmptys = noEmpty(data, 4);
+	if(!noEmptys) { return responseJson(res, 404, 'Missing Data') }
+	
+	if(req.body.rate > 10) { return  responseJson(res, 404, 'Rate is a number greater than allowed')}
 
-				return true;
-
-	    } catch {
-				return false;
-	    }
-		} else {
-			try {
-				var validateAll = {
-					validateId: !VALID.isEmpty(id),
-					validateIdList: !VALID.isEmpty(data.id_list),
-					validateIdGame: !VALID.isEmpty(data.id_game),
-					validateIdConsole: !VALID.isEmpty(data.id_console),
-					validateRate: !VALID.isEmpty(data.rate)
-				}
-
-				return true;
-
-	    } catch {
-				return false;
-	    }
-		}
-	}	
+	next();
 }
 
+function numToString(data) {
+	let dataString = [];
 
-module.exports = VALIDATE;
+	for (let i in data) {
+		dataString.push(data[i].toString());
+	}
+
+	return dataString;
+}
+
+module.exports = validateRating;

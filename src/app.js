@@ -4,7 +4,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-
+ 
 //settings 
 app.set('port', process.env.PORT || 3000);
 
@@ -24,20 +24,18 @@ app.use((req, res, next) => {
     next();
 });
 
-
 //routes
-let listRoute = require('./routes/lists.js');
-let gameRoute = require('./routes/games.js');
-let ratingRoute = require('./routes/ratings.js');
-let consoleRoute = require('./routes/consoles.js');
-let authRoute = require('./routes/auth.js');
+let authRoute = require('./routes/auth.route.js');
+let consoleRoute = require('./routes/consoles.route.js');
+let gameRoute = require('./routes/games.route.js');
+let listRoute = require('./routes/lists.route.js');
+let ratingRoute = require('./routes/ratings.route.js');
 
 //add prefixes to routes
-//app.use('/api', userRoute);
-app.use('/api', listRoute);
-app.use('/api', gameRoute);
-app.use('/api', ratingRoute);
-app.use('/api', consoleRoute);
 app.use('/api', authRoute);
+app.use('/api', consoleRoute);
+app.use('/api', gameRoute);
+app.use('/api', listRoute);
+app.use('/api', ratingRoute);
 
 module.exports = app

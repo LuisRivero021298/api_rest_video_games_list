@@ -1,42 +1,28 @@
 'use strict'
 
-const VALID = require('validator');
-var { responseJson } = require('../lib/responseJson.js');
+const valid = require('validator');
+let { noEmpty } = require('../lib/global.js');
+let { responseJson } = require('../lib/global.js');
 
-function validateAuth(req, res, next) {
-	let objectSize = Object.keys(req.body).length;
-	if(objectSize > 2){
-		validateRegister(req, res, next);
-	} else {
-		validateLogin(req, res, next);
-	}
+function validateLogin(req, res, next) {
+	validateForm(req, res, 2);
+	next();
 }
 
 function validateRegister(req, res, next) {
-	try {
-		let validateAll = {
-			validateUser: !VALID.isEmpty(req.body.username),
-			validateEmail: !VALID.isEmpty(req.body.email),
-			validatePass: !VALID.isEmpty(req.body.password),
-			validatePhoto: !VALID.isEmpty(req.body.photo),
-			validateBirth: !VALID.isEmpty(req.body.birthdate)
-		}
-	} catch {
-		return responseJson(res, 404, 'Missing data');
-	}
+	validateForm(req, res, 5);
 	next();
 }
 
-function validateLogin(req, res, next) {
-	try {
-		let validateAll = {
-			validateEmail: !VALID.isEmpty(req.body.email),
-			validatePass: !VALID.isEmpty(req.body.password),
-		}
-	} catch {
-		return responseJson(res, 404, 'Missing data');
-	}
-	next();
+function validateForm (req, res, numImput) {
+	let noEmptys = noEmpty(Object.values(req.body), numImput);
+	if(!noEmptys) { return responseJson(res, 404, 'Missing data') }
+
+	let isEmail = valid.isEmail(req.body.email);
+	if(!isEmail) { return responseJson(res, 404, 'Invalid email') }
+
+	if(req.body.password.length < 8) { return responseJson(res, 404, 'Very short password')}
 }
 
-module.exports = validateAuth;
+
+module.exports = { validateLogin, validateRegister };

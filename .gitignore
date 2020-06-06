@@ -3,3 +3,9 @@
 
 # database
 /src/database.js
+
+#test
+/test.json
+
+#vscode
+/.vscode

@@ -1,10 +1,10 @@
 'use strict'
 
-const listModel = require('../models/list.js');
-var { responseJson } = require('../lib/responseJson.js');
-let { saveOrEdit } = require('../lib/saveOrEdit.js');
+const listModel = require('../models/list.model.js');
+let { responseJson } = require('../lib/global.js');
+let { saveOrEdit } = require('../lib/global.js');
 
-var controller = {
+const controller = {
 	save: async (req, res) => {
 		let data = await dataStructure(0, req.body, req.userId);
 		saveOrUpdate(data, res);
@@ -37,9 +37,7 @@ var controller = {
 
 const saveOrUpdate = (data, res) => {
 	saveOrEdit('listAddOrEdit(?)', data)
-	.then(response => {
-		responseJson(res, 200, '', response);
-	})
+	.then(response => responseJson(res, 200, '', response))
 	.catch( err => responseJson(res, 404, `Error: ${err}`));
 }
 

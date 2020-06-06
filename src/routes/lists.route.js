@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../lib/verifyToken.js');
-const listController = require('../controllers/ListController.js');
+const listController = require('../controllers/list.controller.js');
 const listValidation = require('../validations/ListValidations.js');
+const { verifyToken } = require('../lib/global.js');
 
 router.get('/lists/', verifyToken, listController.getByUserId);
 

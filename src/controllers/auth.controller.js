@@ -1,11 +1,11 @@
 'use strict'
 
-const authModel = require('../models/auth.js');
+const authModel = require('../models/auth.model.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../config.js');
-const { saveOrEdit } = require('../lib/saveOrEdit.js');
-const { responseJson } = require('../lib/responseJson.js');
+const { saveOrEdit } = require('../lib/global.js');
+const { responseJson } = require('../lib/global.js');
 
 const controller = {
 	register: async (req, res, next) => {

@@ -1,38 +1,18 @@
 'use strict'
-const VALID = require('validator');
-var { responseJson } = require('../lib/responseJson.js');
 
-const VALIDATE = {
-	gameValidate: (data, id) => {
-		if (id === 0){
-			try {
-				var validateAll = {
-					validateName: !VALID.isEmpty(data.name),
-					validateDate: !VALID.isEmpty(data.date),
-					validateGenre: !VALID.isEmpty(data.genre),
-					validateDes: !VALID.isEmpty(data.des),
-					validatePhoto: !VALID.isEmpty(data.photo)			
-				}
-				return true;
-			} catch {
-				return false;
-			}
-		} else {
-			try {
-				var validateAll = {
-					validateId: !VALID.isEmpty(data.id),
-					validateName: !VALID.isEmpty(data.name),
-					validateDate: !VALID.isEmpty(data.date),
-					validateGenre: !VALID.isEmpty(data.genre),
-					validateDes: !VALID.isEmpty(data.des),
-					validatePhoto: !VALID.isEmpty(data.photo)				
-				}
-				return true;
-			} catch {
-				return false;
-			}
-		}
-	}
+const valid = require('validator');
+let { noEmpty } = require('../lib/global.js');
+let { responseJson } = require('../lib/global.js');
+
+function validGame (req, res, next) {
+	let noEmptys = noEmpty(Object.values(req.body), 5);
+	if (!noEmptys) { return responseJson(res, 404, 'Missing Data') }
+
+	let toDate = valid.toDate(req.body.date);
+	if( toDate === null ) { return responseJson(res, 404, 'No a Date')}
+	req.body.date = toDate;
+
+	next();
 }
 
-module.exports = VALIDATE;
+module.exports = validGame;

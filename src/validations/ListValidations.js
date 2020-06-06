@@ -1,11 +1,11 @@
 'use strict'
 
-const VALID = require('validator');
-var { responseJson } = require('../lib/responseJson.js');
+const valid = require('validator');
+let { responseJson } = require('../lib/responseJson.js');
 
 function validateList(req, res, next) {
 	try {
-		let validateUser = !VALID.isEmpty(req.body.nameList)
+		let validateUser = !valid.isEmpty(req.body.name_list)
 	} catch {
 		return responseJson(res, 404, 'Missing data');
 	}
