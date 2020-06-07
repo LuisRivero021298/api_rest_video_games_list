@@ -4,8 +4,8 @@ const MYSQL_CONNECTION = require('../database.js');
 let { responseJson } = require('../lib/responseJson.js');
 
 let controller = {
-	signUp: (req, res) => {
-
+  signUp: (req, res) => {
+	   
 	},
 	singIn: (req, res) => {
 

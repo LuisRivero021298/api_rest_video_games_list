@@ -15,7 +15,6 @@ let controller = {
 		let data = [id, username, email, password, photo, birthdate];
 
 		saveOrEdit(validate, 'userAddOrEdit(?)', data, res);
-		
 	},// ******** end save ********
 	login: (req, res) => {
 		let { email, password } = req.body;
