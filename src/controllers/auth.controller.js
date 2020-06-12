@@ -24,23 +24,24 @@ const controller = {
 			let passwordValid = await comparePassword(req.body.password, response.password);
 
 			if (!passwordValid) {
-				return responseJson(res, 404, `Password invalid`);
+				return responseJson([res, 404, 'Password invalid']);
 			}
 
+			let expireIn = 60 * 60 * 24;
 			let token = jwt.sign({ id: response.id }, config.secret, {
-				expiresIn: 60 * 60 * 24
+				expiresIn: expireIn
 			});
-			responseJson(res, 200, '', token);
+			responseJson([res, 200, '', {token, expireIn}]);
 		})
-		.catch( err => responseJson(res, 404, `Error: ${err}`) );
+		.catch( err => responseJson([res, 404, `Error: ${err}`]) );
 	},
 	profile: (req, res, next) => {
 		if(!req.userId){
 			return responseJson(res, 404, 'No token provider');
 		}
 		authModel.profile(req.userId)
-    .then( response => responseJson(res, 200, '', response))
-    .catch( err => responseJson(res, 404, `Error: ${err}`));
+    .then( response => responseJson([res, 200, '', { response }]))
+    .catch( err => responseJson([res, 404, `Error: ${err}`]));
 	}
 };
 
@@ -57,21 +58,14 @@ let comparePassword = (password1, password2) => {
 let registerOrUpdate = (data, res) => {
 	saveOrEdit('userAddOrEdit(?)', data)
 	.then( response => {
+		let expireIn = 60 * 60 * 24;
 		let token = jwt.sign({id: response.id}, config.secret, {
-			expiresIn : 60 * 60 * 24
+			expiresIn : expireIn
 		});
-		responseJson(res, 200,'',token);
+		responseJson([res, 200,'',{token, expireIn}]);
 	})
-	.catch( err => responseJson(res, 404, `Error: ${err}`));
+	.catch( err => responseJson([res, 404, `Error: ${err}`]));
 }
-
-/*let idValue = (userId) => {
-	let id = 0;
-	if (userId !== undefined && userId !== null){
-		id = userId;
-	}
-	return id;
-}*/
 
 let dataStructure = (dataReceived, id) => {
 	return new Promise( async (resolve, reject) => {

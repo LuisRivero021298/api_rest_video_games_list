@@ -5,7 +5,11 @@ const jwt = require('jsonwebtoken');
 const config = require('../config.js');
 const valid = require('validator');
 
-function responseJson (res, status, message, data){ // Server response
+/* 
+*	params: res = res, status:number, message: string, data: object
+*/
+function responseJson ([res = null, status = 0, message = null, data = {}]){ // Server response
+	console.log(status);
 	if(status !== 200){
 		return res.status(status).json({
 			status: 'error',

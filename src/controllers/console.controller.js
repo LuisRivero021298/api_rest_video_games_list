@@ -12,7 +12,7 @@ const controller = {
 		saveOrUpdate(data, res);
 	},
 	update: (req, res) => {
-		if(!req.params.id) { return responseJson(res, 404, 'Console not selected') }
+		if(!req.params.id) { return responseJson([res, 404, 'Console not selected']) }
 
 		let data = Object.values(req.body);
 		data.unshift(req.params.id);
@@ -21,7 +21,7 @@ const controller = {
 	},
 	getConsoles: (req, res) => {
 		consoleModel.getAllConsoles()
-		.then( consoles => responseJson(res, 200, '', consoles))
+		.then( consoles => responseJson([res, 200, '', {consoles}]))
 		.catch( err => responseJson(res, 404, `Error: ${err}`));
 	},
 	getById: (req, res) => {
@@ -34,7 +34,7 @@ const controller = {
 
 const consoleInteraction = (res, consoleId, action = '') => {
 	if (!consoleId) {
-		return responseJson(res, 404, 'No console selected');
+		return responseJson([res, 404, 'No console selected']);
 	}
 
 	if(action === 'getConsole') {
@@ -44,14 +44,14 @@ const consoleInteraction = (res, consoleId, action = '') => {
 	}
 
 	executeAction
-	.then( response => responseJson(res, 200, '', response))
-	.catch( err => responseJson(res, 404, `Error: ${err}`));
+	.then( response => responseJson([res, 200, '', {response}]))
+	.catch( err => responseJson([res, 404, `Error: ${err}`]));
 }
 
 const saveOrUpdate = (data, res) => {
 	saveOrEdit('consoleAddOrEdit(?)', data)
-	.then( response => responseJson(res, 200, '', response))
-	.catch( err => responseJson(res, 404, `Error: ${err}`));
+	.then( response => responseJson([res, 200, '', {response}]))
+	.catch( err => responseJson([res, 404, `Error: ${err}`]));
 }																														
 
 module.exports = controller;
