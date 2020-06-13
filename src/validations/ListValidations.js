@@ -1,32 +1,15 @@
 'use strict'
-const VALID = require('validator');
-var { responseJson } = require('../lib/responseJson.js');
 
-const VALIDATE = {
-	listValidate: (data, id) => {
-		if(id === 0){
-			try {
-				var validateAll = {
-					validateName: !VALID.isEmpty(data.name),
-					validateIdUser: !VALID.isEmpty(data.id_user)			
-				}
-				return true;
-			} catch {
-				return false;
-			}
-		} else {
-			try {
-				var validateAll = {
-					validateId: !VALID.isEmpty(data.id),
-					validateName: !VALID.isEmpty(data.name),
-					validateIdUser: !VALID.isEmpty(data.id_user)			
-				}
-				return true;
-			} catch {
-				return false;
-			}
-		}
+const valid = require('validator');
+let { responseJson } = require('../lib/responseJson.js');
+
+function validateList(req, res, next) {
+	try {
+		let validateUser = !valid.isEmpty(req.body.name_list)
+	} catch {
+		return responseJson(res, 404, 'Missing data');
 	}
+	next();
 }
 
-module.exports = VALIDATE;
+module.exports = validateList;

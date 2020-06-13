@@ -1,2 +1,15 @@
 # dependencies
+<<<<<<< HEAD
 /node_modules
+=======
+/node_modules
+
+# database
+/src/database.js
+
+#test
+/test.json
+
+#vscode
+/.vscode
+>>>>>>> 5449ad5a2bc960f3678d0fbe3f9eda3c5d8302bc
