@@ -3,7 +3,7 @@
 const mysql_connection = require('../database.js');
 
 const listModel = {
-	getUser: (idUser) => {
+	getListsUser: (idUser) => {
 		return new Promise((resolve, reject) => {
 			let query = 'SELECT id_list, name_list FROM lists where id_user = ?';
 
@@ -12,7 +12,7 @@ const listModel = {
 					return reject(err);
 				}
 				resolve(rows);
-			})
+			});
 		});
 	},
 	deleteList: (idList) => {

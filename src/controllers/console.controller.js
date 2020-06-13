@@ -27,6 +27,13 @@ const controller = {
 	getById: (req, res) => {
 		consoleInteraction(res, req.params.id, 'getConsole');
 	},
+	getConsolesByUser: (req, res) => {
+		if(!req.userId) { return responseJson([res, 404, 'Error: No token provided']); }
+
+		consoleModel.getConsoleByUser(req.userId)
+		.then( consoles => responseJson([res, 200, '', {consoles}]))
+		.catch( err => responseJson([res, 404, `Error: ${err}`]));
+	},
 	delete: (req, res) => {
 		consoleInteraction(res, req.params.id);
 	}

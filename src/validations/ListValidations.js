@@ -1,15 +1,15 @@
 'use strict'
 
 const valid = require('validator');
-let { responseJson } = require('../lib/global.js')
+let { responseJson } = require('../lib/global.js');
 
 function validateList(req, res, next) {
 	try {
-		let validateUser = !valid.isEmpty(req.body.name_list)
+		let validateUser = !valid.isEmpty(req.body.name_list);
 	} catch {
-		return responseJson([res, 404, 'Missing data'])
+		return responseJson([res, 404, 'Missing data']);
 	}
-	next()
+	next();
 }
 
-module.exports = validateList
+module.exports = validateList;

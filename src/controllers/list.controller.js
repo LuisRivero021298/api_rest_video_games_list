@@ -21,10 +21,10 @@ const controller = {
 		if(!req.userId) {
 			return responseJson([res, 404, 'No token provider']);
 		}
-		listModel.getUser(req.userId)
+		listModel.getListsUser(req.userId)
 		.then( response => responseJson([res, 200, '', {response}]))
 		.catch( err => responseJson([res, 404, `Error: ${err}`]));
-	},// ******** end geByUserId ********
+	},
 	delete: (req, res) => {
 		if(!req.params.id) {
 			return responseJson([res, 404, 'List id missing'])
@@ -32,7 +32,7 @@ const controller = {
 		listModel.deleteList(req.params.id)
 		.then(response => responseJson([res, 200, '', {response}]))
 		.catch( err => responseJson([res, 404, `Error: ${err}`]));
-	}// ******** end delete ********
+	}
 }
 
 const saveOrUpdate = (data, res) => {
