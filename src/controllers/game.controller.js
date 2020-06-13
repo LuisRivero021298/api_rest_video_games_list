@@ -13,7 +13,7 @@ const controller = {
 		saveOrUpdate(data, res);
 	},
 	update: (req, res) => {
-		if (!req.params.id) { return responseJson(res, 404, 'No game selected')}
+		if (!req.params.id) { return responseJson([res, 404, 'No game selected'])}
 
 		let data = Object.values(req.body);
 		data.unshift(req.params.id);
@@ -22,22 +22,29 @@ const controller = {
 	},
 	getGames: (req, res) => {
 		gameModel.getAllGames()
-		.then( games => responseJson(res, 200, '', games))
-		.catch( err => responseJson(res,404, `Error: ${err}`));
+		.then( games => responseJson([res, 200, '', {games}]))
+		.catch( err => responseJson([res,404, `Error: ${err}`]));
+	},
+	getGamesByUser: (req, res) => {
+		if (!req.userId) { return responseJson([res, 404, 'Error: No Token provider']); }
+
+		gameModel.getGamesByUser(req.userId)
+		.then( games => responseJson([res, 200, '', {games}]))
+		.catch( err => responseJson([res,404, `Error: ${err}`]));
 	},
 	getById: (req, res) => {
-		if (!req.params.id) { return responseJson(res, 404, 'No game selected')}
+		if (!req.params.id) { return responseJson([res, 404, 'No game selected']); }
 
 		gameModel.getGame(req.params.id)
-		.then( game => responseJson(res, 200, '', game))
-		.catch( err => responseJson(res, 404, `Error: ${err}`));
+		.then( game => responseJson([res, 200, '', {game}]))
+		.catch( err => responseJson([res, 404, `Error: ${err}`]));
 	}
 }
 
 const saveOrUpdate = (data, res) => {
 	saveOrEdit('gameAddOrEdit(?)', data)
-	.then( game => responseJson(res, 200, '', game))
-	.catch( err => responseJson(res,404, `Error: ${err}`));
+	.then( game => responseJson([res, 200, '', {game}]))
+	.catch( err => responseJson([res,404, `Error: ${err}`]));
 }
 
 module.exports = controller;

@@ -16,12 +16,12 @@ function validateRegister(req, res, next) {
 
 function validateForm (req, res, numImput) {
 	let noEmptys = noEmpty(Object.values(req.body), numImput);
-	if(!noEmptys) { return responseJson(res, 404, 'Missing data') }
+	if(!noEmptys) { return responseJson([res, 404, 'Missing data']); }
 
 	let isEmail = valid.isEmail(req.body.email);
-	if(!isEmail) { return responseJson(res, 404, 'Invalid email') }
+	if(!isEmail) { return responseJson([res, 404, 'Invalid email']); }
 
-	if(req.body.password.length < 8) { return responseJson(res, 404, 'Very short password')}
+	if(req.body.password.length < 8) { return responseJson([res, 404, 'Very short password']); }
 }
 
 

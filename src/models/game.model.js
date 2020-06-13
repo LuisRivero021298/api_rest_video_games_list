@@ -22,6 +22,16 @@ const gameModel = {
 				resolve(rows);
 			})
 		});
+	},
+	getGamesByUser: (idUser) => {
+		return new Promise((resolve, reject) => {
+			let query = 'CALL getGamesByUser(?)';
+
+			mysql_connection.query(query, [idUser], (err, rows) =>{
+				if(err) { return reject(err); }
+				resolve(rows);
+			});
+		});
 	}
 }
 

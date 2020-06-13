@@ -11,7 +11,7 @@ const controller = {
 	},
 	update: async (req, res) => {
 		if(!req.params.id) {
-			return responseJson(res, 404, 'No list selected');
+			return responseJson([res, 404, 'No list selected']);
 		}
 		let data = await dataStructure(req.params.id, req.body, req.userId);	
 		saveOrUpdate(data,res);
@@ -19,26 +19,26 @@ const controller = {
 	},
 	getByUserId: (req, res) => {
 		if(!req.userId) {
-			return responseJson(res, 404, 'No token provider');
+			return responseJson([res, 404, 'No token provider']);
 		}
-		listModel.getUser(req.userId)
-		.then( response => responseJson(res, 200, '', response))
-		.catch( err => responseJson(res, 404, `Error: ${err}`));
-	},// ******** end geByUserId ********
+		listModel.getListsUser(req.userId)
+		.then( response => responseJson([res, 200, '', {response}]))
+		.catch( err => responseJson([res, 404, `Error: ${err}`]));
+	},
 	delete: (req, res) => {
 		if(!req.params.id) {
-			return responseJson(res, 404, 'List id missing')
+			return responseJson([res, 404, 'List id missing'])
 		}
 		listModel.deleteList(req.params.id)
-		.then(response => responseJson(res, 200, '', response))
-		.catch( err => responseJson(res, 404, `Error: ${err}`));
-	}// ******** end delete ********
+		.then(response => responseJson([res, 200, '', {response}]))
+		.catch( err => responseJson([res, 404, `Error: ${err}`]));
+	}
 }
 
 const saveOrUpdate = (data, res) => {
 	saveOrEdit('listAddOrEdit(?)', data)
-	.then(response => responseJson(res, 200, '', response))
-	.catch( err => responseJson(res, 404, `Error: ${err}`));
+	.then(response => responseJson([res, 200, '', response]))
+	.catch( err => responseJson([res, 404, `Error: ${err}`]));
 }
 
 const dataStructure = (idList, dataReceived, userId) => {

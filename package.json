@@ -1,13 +1,13 @@
 {
   "name": "GamesLists",
   "version": "1.0.0",
-  "description": "",
+  "description": "It is a CRUD app, with a user registration and login system.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Luis Rivero",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
