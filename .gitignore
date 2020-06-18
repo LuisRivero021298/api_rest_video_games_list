@@ -10,6 +10,12 @@
 #test
 /test.json
 
+/*.swp
+/*.swo
+
+#file public
+/src/public
+
 #vscode
 /.vscode
 >>>>>>> 5449ad5a2bc960f3678d0fbe3f9eda3c5d8302bc

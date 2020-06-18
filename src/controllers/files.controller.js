@@ -6,17 +6,19 @@ const { responseJson } = require("../lib/global.js");
 
 const controller = {
   uploadImage: (req, res) => {
+    if (req.params.name) {
+      deleteImage(req.params.name);
+    }
+
     const filePath = req.files.file0.path;
     const file = imageName(filePath);
     const fileName = `${file[0]}.${file[1]}`;
     const fileExt = file[1];
     const validExt = validExtension(fileExt);
-    console.log(validExt);
 
     if (!validExt) {
       fs.unlink(filePath, (err) => {
         if (err) throw err;
-
         return responseJson([res, 404, "File not allowed"]);
       });
     } else {
@@ -25,9 +27,9 @@ const controller = {
   },
   getImage: (req, res) => {
     const nameImage = req.params.name;
-    const pathFile = `./src/public/images/${nameImage}`;
+    const filePath = `./src/public/images/${nameImage}`;
 
-    fs.exists(pathFile, (exists) => {
+    fs.exists(filePath, (exists) => {
       if (!exists) {
         return responseJson([res, 404, "File not exists"]);
       }
@@ -51,6 +53,13 @@ const validExtension = (ext) => {
   }
 
   return true;
+};
+
+const deleteImage = (name) => {
+  const filePath = `./src/public/images/${name}`;
+  fs.unlink(filePath, (err) => {
+    if (err) throw err;
+  });
 };
 
 module.exports = controller;

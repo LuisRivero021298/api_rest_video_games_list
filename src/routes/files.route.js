@@ -10,4 +10,6 @@ router.post("/upload-image", md_upload, fileController.uploadImage);
 
 router.get("/image/:name", fileController.getImage);
 
+router.put("/update-image/:name", md_upload, fileController.uploadImage);
+
 module.exports = router;
