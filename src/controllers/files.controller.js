@@ -23,7 +23,18 @@ const controller = {
       return responseJson([res, 200, "", { fileName }]);
     }
   },
-  getImage: (req, res) => {},
+  getImage: (req, res) => {
+    const nameImage = req.params.name;
+    const pathFile = `./src/public/images/${nameImage}`;
+
+    fs.exists(pathFile, (exists) => {
+      if (!exists) {
+        return responseJson([res, 404, "File not exists"]);
+      }
+
+      return res.sendFile(path.resolve(pathFile));
+    });
+  },
 };
 
 const imageName = (path) => {

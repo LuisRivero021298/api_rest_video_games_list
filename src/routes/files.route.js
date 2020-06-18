@@ -8,4 +8,6 @@ const fileController = require("../controllers/files.controller.js");
 
 router.post("/upload-image", md_upload, fileController.uploadImage);
 
+router.get("/image/:name", fileController.getImage);
+
 module.exports = router;
