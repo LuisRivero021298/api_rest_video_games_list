@@ -21,9 +21,11 @@ git clone https://github.com/LuisRivero021298/api_rest_video_games_list.git
 #### _Within the project you must execute the following commands:_
 **-1** npm i
 
-**-2** Create a file src/database.js
+**-3** Import DB 
 
-**-3** Write the following to the file created above:
+**-4** Create a file src/database.js
+
+**-5** Write the following to the file created above:
 ```
 const mysql = require('mysql');
 
@@ -31,7 +33,7 @@ const mysql_connection = mysql.createConnection({
 	host: PORT,
 	user: USER,
 	password: PASSWORD,
-	database: 'gameLists'
+	database: NAME_DATABASE
 });
 
 mysql_connection.connect((err)=>{
