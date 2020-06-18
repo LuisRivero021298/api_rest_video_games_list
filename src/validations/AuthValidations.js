@@ -10,7 +10,7 @@ function validateLogin(req, res, next) {
 }
 
 function validateRegister(req, res, next) {
-	validateForm(req, res, 5);
+	validateForm(req, res, 4);
 	next();
 }
 
