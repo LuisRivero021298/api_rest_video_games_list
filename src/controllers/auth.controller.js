@@ -51,16 +51,16 @@ const controller = {
   },
 };
 
-let encryptPassword = async (password) => {
+async function encryptPassword(password) {
   const salt = await bcrypt.genSalt(10);
   return bcrypt.hash(password, salt);
-};
+}
 
-let comparePassword = (password1, password2) => {
+function comparePassword(password1, password2) {
   return bcrypt.compare(password1, password2);
-};
+}
 
-let registerOrUpdate = (data, res) => {
+function registerOrUpdate(data, res) {
   saveOrEdit("userAddOrEdit(?)", data)
     .then((response) => {
       let expireIn = 60 * 60 * 24;
@@ -70,9 +70,9 @@ let registerOrUpdate = (data, res) => {
       responseJson([res, 200, "", { token, expireIn }]);
     })
     .catch((err) => responseJson([res, 404, `Error: ${err}`]));
-};
+}
 
-let dataStructure = (dataReceived, id) => {
+function dataStructure(dataReceived, id) {
   return new Promise(async (resolve, reject) => {
     dataReceived.password = await encryptPassword(dataReceived.password);
     let fullData = Object.values(dataReceived);
@@ -80,8 +80,7 @@ let dataStructure = (dataReceived, id) => {
 
     resolve(fullData);
   });
-};
+}
 
 module.exports = controller;
 //end AuthController
-

@@ -10,8 +10,8 @@
 #test
 /test.json
 
-/*.swp
-/*.swo
+*.swp
+*.swo
 
 #file public
 /src/public
