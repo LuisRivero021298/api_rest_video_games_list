@@ -6,7 +6,7 @@ let { saveOrEdit } = require("../lib/global.js");
 
 const controller = {
   save: async (req, res) => {
-    let data = await dataStructure(0, req.body, req.userId);
+    let data = await dataStructure(0, req.body);
     saveOrUpdate(data, res);
   },
   update: async (req, res) => {
@@ -42,11 +42,10 @@ function saveOrUpdate(data, res) {
     .catch((err) => responseJson([res, 404, `Error: ${err}`]));
 }
 
-function dataStructure(idList, dataReceived, userId) {
+function dataStructure(idList, dataReceived) {
   return new Promise((resolve) => {
     let fullData = Object.values(dataReceived);
     fullData.unshift(idList);
-    fullData.push(userId);
 
     resolve(fullData);
   });
