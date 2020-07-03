@@ -5,7 +5,15 @@ const mysql_connection = require("../database.js");
 const gameModel = {
   getGame: (idGame) => {
     return new Promise((resolve, reject) => {
-      let query = "SELECT * FROM games WHERE id_game = ?";
+      let query = `SELECT 
+          games.id_game, 
+          games.name_game, 
+          games.date_release, 
+          games.description, 
+          games.photo, genres.* FROM games 
+        INNER JOIN genres on 
+          genres.id_genre = games.genre 
+        WHERE id_game = ?; `;
 
       mysql_connection.query(query, [idGame], (err, row) => {
         if (err) {
@@ -51,4 +59,3 @@ const gameModel = {
 };
 
 module.exports = gameModel;
-
