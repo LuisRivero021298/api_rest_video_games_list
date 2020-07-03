@@ -25,7 +25,18 @@ const controller = {
       .then((response) => responseJson([res, 200, "", { response }]))
       .catch((err) => responseJson([res, 404, `Error: ${err}`]));
   },
-  delete: (req, res) => {
+  getList: (req, res) => {
+    if (!req.params.id) {
+      return responseJson([res, 404, "List id missing"]);
+    }
+    listModel
+      .getList(req.params.id)
+      .then((response) => {
+        responseJson([res, 200, "", { response }]);
+      })
+      .catch((err) => responseJson([res, 4040, `Error: ${err}`]));
+  },
+  deleteList: (req, res) => {
     if (!req.params.id) {
       return responseJson([res, 404, "List id missing"]);
     }
@@ -54,4 +65,3 @@ function dataStructure(idList, dataReceived) {
 module.exports = controller;
 
 //end ListController
-

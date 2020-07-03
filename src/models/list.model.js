@@ -23,18 +23,32 @@ const listModel = {
     return new Promise((resolve, reject) => {
       let query = "DELETE FROM lists WHERE lists.id_list = ?";
 
-      mysql_connection.query(query, [idList], (err, rows, field) => {
+      mysql_connection.query(query, [idList], (err, row) => {
         if (err) {
           return reject(err);
         }
-        if (rows.affectedRows === 0) {
+        if (row.affectedRows === 0) {
           return reject("No delete");
         }
-        resolve(rows);
+        resolve(row);
+      });
+    });
+  },
+  getList: (idList) => {
+    return new Promise((resolve, reject) => {
+      let query = "SELECT * FROM lists where lists.id_list = ?";
+
+      mysql_connection.query(query, [idList], (err, row) => {
+        if (err) {
+          return reject(err);
+        }
+        if (row.length === 0) {
+          return reject("List no exists");
+        }
+        resolve(row);
       });
     });
   },
 };
 
 module.exports = listModel;
-
