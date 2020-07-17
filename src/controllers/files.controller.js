@@ -6,15 +6,17 @@ const { responseJson } = require("../lib/global.js");
 
 const controller = {
   uploadImage: (req, res) => {
+    if (Object.keys(req.files).length === 0) {
+      return responseJson([res, 404, "Nana"]);
+    }
+
     if (req.params.name) {
       deleteImage(req.params.name);
     }
 
-    console.log(req.files);
-    const filePath = req.files.file0.path;
-    const file = imageName(filePath);
-    const fileName = `${file[0]}.${file[1]}`;
-    const fileExt = file[1];
+    const filePath = req.files[0].path;
+    const [fileName, fileExt] = imageName(filePath);
+    const fileComplete = `${fileName}.${fileExt}`;
     const validExt = validExtension(fileExt);
 
     if (!validExt) {
@@ -23,7 +25,7 @@ const controller = {
         return responseJson([res, 404, "File not allowed"]);
       });
     } else {
-      return responseJson([res, 200, "", { fileName }]);
+      return responseJson([res, 200, "", { fileComplete }]);
     }
   },
   getImage: (req, res) => {

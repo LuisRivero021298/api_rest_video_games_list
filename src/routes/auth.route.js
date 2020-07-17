@@ -18,7 +18,7 @@ router.post(
 router.put(
   "/update",
   verifyToken,
-  authValidation.validateRegister,
+  authValidation.validateEdit,
   authController.update
 );
 

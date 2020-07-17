@@ -8,18 +8,31 @@ const { saveOrEdit } = require("../lib/global.js");
 const { responseJson } = require("../lib/global.js");
 
 const controller = {
-  register: async (req, res, next) => {
+  register: async (req, res) => {
     let data = await dataStructure(req.body, 0);
-    console.log(data);
-    registerOrUpdate(data, res);
+
+    saveOrEdit("userAdd(?)", data)
+      .then((response) => {
+        let expireIn = 60 * 60 * 24;
+        let token = jwt.sign({ id: response.id }, config.secret, {
+          expiresIn: expireIn,
+        });
+        responseJson([res, 200, "", { token, expireIn }]);
+      })
+      .catch((err) => responseJson([res, 404, `Error: ${err}`]));
   },
-  update: async (req, res, next) => {
+  update: async (req, res) => {
     let id = req.userId;
     let data = await dataStructure(req.body, id);
+    console.log(data);
 
-    registerOrUpdate(data, res);
+    saveOrEdit("userEdit(?)", data)
+      .then((response) => {
+        responseJson([res, 200, "", { response }]);
+      })
+      .catch((err) => responseJson([res, 404, `Error: ${err}`]));
   },
-  signIn: (req, res, next) => {
+  signIn: (req, res) => {
     authModel
       .signIn(req.body)
       .then(async (response) => {
@@ -40,7 +53,7 @@ const controller = {
       })
       .catch((err) => responseJson([res, 404, `Error: ${err}`]));
   },
-  profile: (req, res, next) => {
+  profile: (req, res) => {
     if (!req.userId) {
       return responseJson(res, 404, "No token provider");
     }
@@ -60,21 +73,11 @@ function comparePassword(password1, password2) {
   return bcrypt.compare(password1, password2);
 }
 
-function registerOrUpdate(data, res) {
-  saveOrEdit("userAddOrEdit(?)", data)
-    .then((response) => {
-      let expireIn = 60 * 60 * 24;
-      let token = jwt.sign({ id: response.id }, config.secret, {
-        expiresIn: expireIn,
-      });
-      responseJson([res, 200, "", { token, expireIn }]);
-    })
-    .catch((err) => responseJson([res, 404, `Error: ${err}`]));
-}
-
 function dataStructure(dataReceived, id) {
   return new Promise(async (resolve, reject) => {
-    dataReceived.password = await encryptPassword(dataReceived.password);
+    if (dataReceived.password !== undefined) {
+      dataReceived.password = await encryptPassword(dataReceived.password);
+    }
     let fullData = Object.values(dataReceived);
     fullData.unshift(id);
 

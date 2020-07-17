@@ -33,7 +33,7 @@ function saveOrEdit(procedure, data) {
       if (rows.length === 0) {
         return reject("It has not been created");
       }
-      resolve(rows[0][0]);
+      resolve(rows[0]);
     });
   });
 }
