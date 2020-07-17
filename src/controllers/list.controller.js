@@ -9,6 +9,12 @@ const controller = {
     let data = await dataStructure(0, req.body);
     saveOrUpdate(data, res);
   },
+  saveImage: (req, res) => {
+    listModel
+      .saveImage(req.body)
+      .then((response) => responseJson([res, 200, "", { response }]))
+      .catch(() => responseJson([res, 404, "Don't save image list"]));
+  },
   update: async (req, res) => {
     if (!req.params.id) {
       return responseJson([res, 404, "No list selected"]);

@@ -10,6 +10,7 @@ router.get("/lists/", verifyToken, listController.getByUserId);
 router.get("/list/:id", listController.getList);
 
 router.post("/list", listValidation, listController.save);
+router.post("/list/image", listController.saveImage);
 
 router.put("/list/:id", listValidation, listController.update);
 

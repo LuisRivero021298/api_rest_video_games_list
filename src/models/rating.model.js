@@ -22,7 +22,7 @@ const ratingModel = {
     return new Promise((resolve, reject) => {
       let query = "DELETE FROM ratings WHERE ratings.id_rating = ?";
 
-      mysql_connection.query(query, [id], (err, row, field) => {
+      mysql_connection.query(query, [id], (err, row) => {
         if (err) {
           return reject(err);
         }
