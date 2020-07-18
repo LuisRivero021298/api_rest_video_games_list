@@ -45,7 +45,7 @@ function verifyToken(req, res, next) {
     return responseJson(res, 401, `Error: No token provided`);
   }
 
-  const decoded = jwt.verify(token, config.secret);
+  let decoded = jwt.verify(token, config.secret);
   req.userId = decoded.id;
   next();
 }
@@ -73,4 +73,3 @@ module.exports = {
   verifyToken,
   noEmpty,
 };
-

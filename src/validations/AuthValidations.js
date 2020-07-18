@@ -5,13 +5,11 @@ let { noEmpty } = require("../lib/global.js");
 let { responseJson } = require("../lib/global.js");
 
 function validateLogin(req, res, next) {
-  validateForm(req, res, 2);
-  next();
+  validateForm(req, res, next, 2);
 }
 
 function validateRegister(req, res, next) {
-  validateForm(req, res, 4);
-  next();
+  validateForm(req, res, next, 4);
 }
 
 function validateEdit(req, res, next) {
@@ -22,7 +20,7 @@ function validateEdit(req, res, next) {
   next();
 }
 
-function validateForm(req, res, numImput) {
+function validateForm(req, res, next, numImput) {
   let noEmptys = noEmpty(Object.values(req.body), numImput);
   if (!noEmptys) {
     return responseJson([res, 404, "Missing data"]);
@@ -36,7 +34,7 @@ function validateForm(req, res, numImput) {
   if (req.body.password.length < 8) {
     return responseJson([res, 404, "Very short password"]);
   }
+  next();
 }
 
 module.exports = { validateLogin, validateRegister, validateEdit };
-
