@@ -26,7 +26,7 @@ const ratingModel = {
         if (err) {
           return reject(err);
         }
-        if (rows.affectedRows === 0) {
+        if (row.affectedRows === 0) {
           return reject("Rating was not removed");
         }
         resolve(row);
